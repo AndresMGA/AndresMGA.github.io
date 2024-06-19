@@ -207,9 +207,20 @@ class MidiPlayer {
 }
 
 async function getInitialMidiFile(){
-  let response = await fetch(
-  "https://github.com/AndresMGA/AndresMGA.github.io/tree/main/scores/chromatic/songs/test/file.mid"
-  );
+  const currentUrl = window.location.href;
+
+// Create a URL object
+const url = new URL(currentUrl);
+
+// Get the query string part of the URL
+const queryString = url.search; // This includes the '?' character
+
+// Remove the '?' character if you just want the parameters
+const queryParams = queryString.substring(1);
+
+console.log(queryParams);
+  let response = await fetch('https://AndresMGA.github.io/scores/'+queryParams+'/file.mid');
+
   let data = await response.blob();
   let container = document.createElement("div");
 
