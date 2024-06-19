@@ -207,7 +207,9 @@ class MidiPlayer {
 }
 
 async function getInitialMidiFile(){
-  let response = await fetch('https://assets.codepen.io/81395/chopin.mid');
+  let response = await fetch(
+  "https://github.com/AndresMGA/AndresMGA.github.io/tree/main/scores/chromatic/songs/test/file.mid"
+  );
   let data = await response.blob();
   let container = document.createElement("div");
 
