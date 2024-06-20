@@ -220,7 +220,14 @@ const queryParams = queryString.substring(1);
 
 console.log(queryParams);
   let response = await fetch('https://AndresMGA.github.io/scores/'+queryParams+'/file.mid');
+  const svgContainer = document.getElementById('mySvg');
 
+  fetch('https://AndresMGA.github.io/scores/'+queryParams+'/file.svg')
+    .then(response => response.text())
+    .then(svgText => {
+      svgContainer.innerHTML = svgText;
+    })
+    .catch(error => console.error('Error fetching SVG: ', error));
   let data = await response.blob();
   let container = document.createElement("div");
 
