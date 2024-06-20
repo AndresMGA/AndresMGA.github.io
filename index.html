@@ -2,9 +2,7 @@
 <html lang="en" >
 <head>
   <meta charset="UTF-8">
-  <title>CodePen - Magenta Midi Player</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
-<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css'>
+  <title>iplaytheharmonica</title>
 <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css'><link rel="stylesheet" href="./style.css">
 
 </head>
@@ -12,15 +10,25 @@
 
 
 
-<div class="container" id="main-container"></div>
-<svg id="mySvg"></svg>
+<div class="container" id="main-container">
+  <div id="buttons-container" class="container d-flex flex-column bd-highlight my-4">
+    <div id="buttons" class="buttons hide">
+      <i id="pause" class="fa-solid fa-circle-pause active hide pause" ></i>
+      <i id="play" class="fa-solid fa-circle-play play" ></i>
+      <i id="rewind" class="fa-solid fa-backward rewind" ></i>
+      <i id="forward" class="fa-solid fa-forward forward" ></i>
+      <i id="stop" class="fa-solid fa-refresh stop" ></i>
+    </div>
+  </div>
+  <div id="svg-container"></div>
+</div>
+
+
+
 <!-- partial -->
   <script src='https://cdn.jsdelivr.net/npm/@magenta/music@1.23.1/dist/magentamusic.min.js'></script>
 <script src='https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/js/fontawesome.min.js'></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js'></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/js/bootstrap.min.js'></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js'></script>
-<script src='https://assets.codepen.io/81395/DragSelect.js'></script><script  src="./script.js"></script>
+<script  src="./script.js"></script>
 
 </body>
 </html>
