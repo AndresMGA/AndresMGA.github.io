@@ -61,9 +61,6 @@ class MidiPlayer {
     this.setListeners();
   }
 
-
-
-
   handlePlay() {
     this.checkPlayers();
     if (mm.Player.tone.Transport.loop) {
