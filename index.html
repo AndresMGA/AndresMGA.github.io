@@ -39,7 +39,7 @@
         }
 
         
-        w = Math.round((h/9)*16);
+        vw = Math.round((h/9)*16);
 
         var containerDiv = document.createElement('div');
         containerDiv.id = 'container';
@@ -54,7 +54,7 @@
         playerDiv.id = 'player';
         playerDiv.style.position = 'fixed';
         playerDiv.style.top = '0px';
-        playerDiv.style.left = '0px';
+        playerDiv.style.left = Math.round((v-vw)/2)+'px';
         playerDiv.style.width = w+'px';
         playerDiv.style.height = h+'px';
         containerDiv.appendChild(playerDiv);
@@ -68,7 +68,7 @@
         overlayDiv.style.height = h+'px';
         overlayDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.25)'; // Semi-transparent black overlay
         containerDiv.appendChild(overlayDiv);
-
+        w
 
         var fsBut = document.createElement('button');
         fsBut.id = 'fs';
@@ -145,7 +145,7 @@
 
         }
         // The API will call this function when the video player is ready.
-        function onPlayerReady(event) {
+        function onPlayerReady(event) {w
             
             
                 player.setPlaybackRate(0);
