@@ -40,6 +40,7 @@
 
         
         vw = Math.round((h/9)*16);
+        var left = Math.round((v-vw)/2)+'px';
 
         var containerDiv = document.createElement('div');
         containerDiv.id = 'container';
@@ -54,7 +55,7 @@
         playerDiv.id = 'player';
         playerDiv.style.position = 'fixed';
         playerDiv.style.top = '0px';
-        playerDiv.style.left = Math.round((v-vw)/2)+'px';
+        playerDiv.style.left = left;
         playerDiv.style.width = w+'px';
         playerDiv.style.height = h+'px';
         containerDiv.appendChild(playerDiv);
@@ -63,7 +64,7 @@
         overlayDiv.id = 'overlay';
         overlayDiv.style.position = 'fixed';
         overlayDiv.style.top = '0px';
-        overlayDiv.style.left = '0px';
+        overlayDiv.style.left = left;
         overlayDiv.style.width = w+'px';
         overlayDiv.style.height = h+'px';
         overlayDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.25)'; // Semi-transparent black overlay
