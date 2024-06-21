@@ -30,16 +30,24 @@
 
     <script>
 
-        var screenHeight = window.screen.height;
-        var screenWidth = Math.round((screenHeight/9)*16);
+        var h = window.screen.height;
+        var w = window.screen.width;
+
+        if(h>w){
+             w = window.screen.height;
+             h = window.screen.width;
+        }
+
+        
+        w = Math.round((h/9)*16);
 
         var containerDiv = document.createElement('div');
         containerDiv.id = 'container';
         containerDiv.style.position = 'fixed';
         containerDiv.style.top = '0px';
         containerDiv.style.left = '0px';
-        containerDiv.style.width = screenWidth+'px';
-        containerDiv.style.height = screenHeight+'px';
+        containerDiv.style.width = w+'px';
+        containerDiv.style.height = h+'px';
         document.body.appendChild(containerDiv);
 
         var playerDiv = document.createElement('div');
@@ -47,8 +55,8 @@
         playerDiv.style.position = 'fixed';
         playerDiv.style.top = '0px';
         playerDiv.style.left = '0px';
-        playerDiv.style.width = screenWidth+'px';
-        playerDiv.style.height = screenHeight+'px';
+        playerDiv.style.width = w+'px';
+        playerDiv.style.height = h+'px';
         containerDiv.appendChild(playerDiv);
         
         var overlayDiv = document.createElement('div');
@@ -56,8 +64,8 @@
         overlayDiv.style.position = 'fixed';
         overlayDiv.style.top = '0px';
         overlayDiv.style.left = '0px';
-        overlayDiv.style.width = screenWidth+'px';
-        overlayDiv.style.height = screenHeight+'px';
+        overlayDiv.style.width = w+'px';
+        overlayDiv.style.height = h+'px';
         overlayDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.25)'; // Semi-transparent black overlay
         containerDiv.appendChild(overlayDiv);
 
@@ -66,30 +74,30 @@
         fsBut.id = 'fs';
         fsBut.innerText = "FS"
         fsBut.style.position = 'fixed';
-        fsBut.style.top = Math.round(screenHeight*0.1)+'px';
-        fsBut.style.left = Math.round(screenWidth*0.2)+'px';
-        fsBut.style.width = Math.round(screenHeight*0.08)+'px';
-        fsBut.style.height = Math.round(screenHeight*0.08)+'px';
+        fsBut.style.top = Math.round(h*0.1)+'px';
+        fsBut.style.left = Math.round(w*0.2)+'px';
+        fsBut.style.width = Math.round(h*0.08)+'px';
+        fsBut.style.height = Math.round(h*0.08)+'px';
         containerDiv.appendChild(fsBut);
 
         var playBut = document.createElement('button');
         playBut.id = 'play';
         playBut.innerText = "Play"
         playBut.style.position = 'fixed';
-        playBut.style.top = Math.round(screenHeight*0.1)+'px';
-        playBut.style.left = Math.round(screenWidth*0.3)+'px';
-        playBut.style.width = Math.round(screenHeight*0.08)+'px';
-        playBut.style.height = Math.round(screenHeight*0.08)+'px';
+        playBut.style.top = Math.round(h*0.1)+'px';
+        playBut.style.left = Math.round(w*0.3)+'px';
+        playBut.style.width = Math.round(h*0.08)+'px';
+        playBut.style.height = Math.round(h*0.08)+'px';
         containerDiv.appendChild(playBut);
 
         var pauseBut = document.createElement('button');
         pauseBut.id = 'pause';
         pauseBut.innerText = "Pause"
         pauseBut.style.position = 'fixed';
-        pauseBut.style.top = Math.round(screenHeight*0.1)+'px';
-        pauseBut.style.left = Math.round(screenWidth*0.4)+'px';
-        pauseBut.style.width = Math.round(screenHeight*0.08)+'px';
-        pauseBut.style.height = Math.round(screenHeight*0.08)+'px';
+        pauseBut.style.top = Math.round(h*0.1)+'px';
+        pauseBut.style.left = Math.round(w*0.4)+'px';
+        pauseBut.style.width = Math.round(h*0.08)+'px';
+        pauseBut.style.height = Math.round(h*0.08)+'px';
         containerDiv.appendChild(pauseBut);
 
    
@@ -106,7 +114,7 @@
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('player', {
                 height: screenHeight,
-                width: screenWidth,
+                width: w,
                 videoId: 'UKzO8gBBt4k', // Replace with your YouTube video ID
                 playerVars: {
                     'controls': 0, // Hide YouTube controls
