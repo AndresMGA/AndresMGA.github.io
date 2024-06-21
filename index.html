@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YouTube Player with Full Custom Controls</title>
-    <script src="https://www.youtube.com/iframe_api" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></script>
+    <script src="https://www.youtube.com/iframe_api" frameborder="0" allowfullscreen></script>
 
 </head>
 <body>
     <!-- The div that will contain the YouTube player -->
-
+    
  
 
     
@@ -29,6 +29,14 @@
     </div>
 
     <script>
+        var containerDiv = document.createElement('div');
+        containerDiv.id = 'container';
+        containerDiv.style.position = 'fixed';
+        containerDiv.style.top = '0px';
+        containerDiv.style.left = '0px';
+        containerDiv.style.width = screenWidth+'px';
+        containerDiv.style.height = screenHeight+'px';
+        document.body.appendChild(containerDiv);
 
         var screenHeight = window.screen.height;
         var screenWidth = Math.round((screenHeight/9)*16);
@@ -39,7 +47,7 @@
         playerDiv.style.left = '0px';
         playerDiv.style.width = screenWidth+'px';
         playerDiv.style.height = screenHeight+'px';
-        document.body.appendChild(playerDiv);
+        containerDiv.appendChild(playerDiv);
         
         var overlayDiv = document.createElement('div');
         overlayDiv.id = 'overlay';
@@ -49,7 +57,7 @@
         overlayDiv.style.width = screenWidth+'px';
         overlayDiv.style.height = screenHeight+'px';
         overlayDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.25)'; // Semi-transparent black overlay
-        document.body.appendChild(overlayDiv);
+        containerDiv.appendChild(overlayDiv);
 
 
         var fsBut = document.createElement('button');
@@ -60,7 +68,7 @@
         fsBut.style.left = Math.round(screenWidth*0.2)+'px';
         fsBut.style.width = Math.round(screenHeight*0.08)+'px';
         fsBut.style.height = Math.round(screenHeight*0.08)+'px';
-        document.body.appendChild(fsBut);
+        containerDiv.appendChild(fsBut);
 
         var playBut = document.createElement('button');
         playBut.id = 'play';
@@ -70,7 +78,7 @@
         playBut.style.left = Math.round(screenWidth*0.3)+'px';
         playBut.style.width = Math.round(screenHeight*0.08)+'px';
         playBut.style.height = Math.round(screenHeight*0.08)+'px';
-        document.body.appendChild(playBut);
+        containerDiv.appendChild(playBut);
 
         var pauseBut = document.createElement('button');
         pauseBut.id = 'pause';
@@ -80,7 +88,7 @@
         pauseBut.style.left = Math.round(screenWidth*0.4)+'px';
         pauseBut.style.width = Math.round(screenHeight*0.08)+'px';
         pauseBut.style.height = Math.round(screenHeight*0.08)+'px';
-        document.body.appendChild(pauseBut);
+        containerDiv.appendChild(pauseBut);
 
    
 
@@ -141,8 +149,8 @@
                 logTime();
 
             fsBut.addEventListener('click', function() {
-            var fullscreenElement = document.getElementById('fullscreen-element');
-            requestFullScreen(fullscreenElement);
+                containerDiv.webkitRequestFullscreen();
+            //toggleFullscreen();
         });
             // Event listeners for custom controls
             document.getElementById('play').addEventListener('click', function() {
@@ -272,16 +280,16 @@
         
 
         function toggleFullscreen() {
-            const elem = document.getElementById('videoContainer');
+           
             if (!document.fullscreenElement) {
-                if (elem.requestFullscreen) {
-                    elem.requestFullscreen();
-                } else if (elem.mozRequestFullScreen) { // Firefox
-                    elem.mozRequestFullScreen();
-                } else if (elem.webkitRequestFullscreen) { // Chrome, Safari, Opera
-                    elem.webkitRequestFullscreen();
-                } else if (elem.msRequestFullscreen) { // IE/Edge
-                    elem.msRequestFullscreen();
+                if (player.requestFullscreen) {
+                    player.requestFullscreen();
+                } else if (player.mozRequestFullScreen) { // Firefox
+                    player.mozRequestFullScreen();
+                } else if (player.webkitRequestFullscreen) { // Chrome, Safari, Opera
+                    player.webkitRequestFullscreen();
+                } else if (player.msRequestFullscreen) { // IE/Edge
+                    player.msRequestFullscreen();
                 }
             } else {
                 if (document.exitFullscreen) {
