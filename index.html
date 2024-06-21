@@ -29,6 +29,10 @@
     </div>
 
     <script>
+
+var screenHeight = window.screen.height;
+        var screenWidth = Math.round((screenHeight/9)*16);
+
         var containerDiv = document.createElement('div');
         containerDiv.id = 'container';
         containerDiv.style.position = 'fixed';
@@ -38,8 +42,6 @@
         containerDiv.style.height = screenHeight+'px';
         document.body.appendChild(containerDiv);
 
-        var screenHeight = window.screen.height;
-        var screenWidth = Math.round((screenHeight/9)*16);
         var playerDiv = document.createElement('div');
         playerDiv.id = 'player';
         playerDiv.style.position = 'fixed';
