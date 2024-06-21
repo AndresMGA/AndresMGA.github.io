@@ -1,5 +1,5 @@
 let players = []
-
+let timestampMap = new Map();
 class MidiPlayer {
   constructor(  midiFile) {
     this.midiFile = midiFile;
@@ -15,13 +15,11 @@ class MidiPlayer {
     this.loadFile();
   }
 
-  // magenta functions ////////////////////////////////////////
   loadFile() {
     mm.blobToNoteSequence(this.midiFile)
       .then((s) => {
         this.seq = s;
-
-        
+       
         this.buttons.classList.remove("hide");
         console.log(s);
         this.loadSequence();
@@ -44,7 +42,18 @@ class MidiPlayer {
   }
   
   callback(note) {
-    console.log(this.seq.notes.indexOf(note));
+    
+    timestampMap.forEach((timestamp, element) => {
+      if (timestamp < note.startTime) {
+        element.setAttribute('fill', 'black');
+        element.setAttribute('stroke', 'black');
+      }
+      else if (timestamp == note.startTime) {
+        element.setAttribute('fill', 'red');
+        element.setAttribute('stroke', 'red');
+        return;
+      }
+    });
   }
 
   loadSequence() {
@@ -83,8 +92,7 @@ class MidiPlayer {
 
   // setListeners ////////////////////////////////////////////////////
   setListeners() {
-    let that = this;
-
+    
     this.playBtn.addEventListener("click", (e) => {
       this.pauseBtn.classList.add("active");
       this.handlePlay();
@@ -107,7 +115,21 @@ class MidiPlayer {
     });
   }
 }
+function midiTimestampToSeconds(ticks, resolution = 480, bpm = 120) {
+  // Convert BPM to microseconds per quarter note
+  const microsecondsPerMinute = 60000000;
+  const microsecondsPerQuarterNote = microsecondsPerMinute / bpm;
 
+  // Calculate microseconds per tick
+  const microsecondsPerTick = microsecondsPerQuarterNote / resolution;
+
+  // Convert ticks to seconds
+  let seconds = (ticks * microsecondsPerTick) / 1000000;
+
+  seconds = Number(seconds.toFixed(3));
+
+  return seconds;
+}
 async function fetchMidiFile(queryParams){
   let response = await fetch('https://AndresMGA.github.io/scores/'+queryParams+'/file.mid');
   let data = await response.blob();
@@ -116,27 +138,28 @@ async function fetchMidiFile(queryParams){
 }
 
 async function fetchSVG(queryParams) {
- 
-    // Fetch the SVG file
+
     const response = await fetch('https://AndresMGA.github.io/scores/'+queryParams+'/file.svg');
     const svgText = await response.text();
-
-    // Create a new SVG element
     const svgContainer = document.getElementById("svg-container");
-
-
-    // Append the SVG text as a child of the container
     svgContainer.innerHTML = svgText;
-
-    // Adjust SVG size to fit its container
     const svgElement = svgContainer.querySelector('svg');
-    if (svgElement) {
-      const containerWidth = svgContainer.clientWidth;
-      const containerHeight = svgContainer.clientHeight;
-      console.log(window.innerHeight)
-      svgElement.setAttribute('width', "100%");
-      svgElement.setAttribute('height', "800px");
-    }
+    svgElement.setAttribute('width', "100%");
+    svgElement.setAttribute('height', window.innerHeight);
+    const timestampElements = svgElement.querySelectorAll('[timestamp]');
+    
+
+    timestampElements.forEach(element => {
+      const timestamp = parseInt(element.getAttribute('timestamp'), 10);
+      timestampMap.set(element, midiTimestampToSeconds(timestamp,480,120));
+    });
+
+    const sortedTimestampArray = Array.from(timestampMap.entries()).sort((a, b) => a[1] - b[1]);
+    timestampMap = new Map(sortedTimestampArray);
+
+    console.log('Timestamp Map:', timestampMap);
+
+
   }
 
   const currentUrl = window.location.href;
