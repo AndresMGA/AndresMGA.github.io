@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YouTube Player with Full Custom Controls</title>
-    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="https://www.youtube.com/iframe_api" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></script>
 
 </head>
 <body>
@@ -52,6 +52,15 @@
         document.body.appendChild(overlayDiv);
 
 
+        var fsBut = document.createElement('button');
+        fsBut.id = 'fs';
+        fsBut.innerText = "FS"
+        fsBut.style.position = 'fixed';
+        fsBut.style.top = Math.round(screenHeight*0.7)+'px';
+        fsBut.style.left = Math.round(screenWidth*0.2)+'px';
+        fsBut.style.width = Math.round(screenHeight*0.08)+'px';
+        fsBut.style.height = Math.round(screenHeight*0.08)+'px';
+        document.body.appendChild(fsBut);
 
         var playBut = document.createElement('button');
         playBut.id = 'play';
@@ -131,6 +140,10 @@
                 lock=1;
                 logTime();
 
+            fsBut.addEventListener('click', function() {
+            var fullscreenElement = document.getElementById('fullscreen-element');
+            requestFullScreen(fullscreenElement);
+        });
             // Event listeners for custom controls
             document.getElementById('play').addEventListener('click', function() {
                 userSettings();
@@ -255,6 +268,33 @@
                 clickInfoElement.textContent = 'Clicked at coordinates: X = ' + x + ', Y = ' + y;
             }
         });
+
+        
+
+        function toggleFullscreen() {
+            const elem = document.getElementById('videoContainer');
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                } else if (elem.mozRequestFullScreen) { // Firefox
+                    elem.mozRequestFullScreen();
+                } else if (elem.webkitRequestFullscreen) { // Chrome, Safari, Opera
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) { // IE/Edge
+                    elem.msRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.mozCancelFullScreen) { // Firefox
+                    document.mozCancelFullScreen();
+                } else if (document.webkitExitFullscreen) { // Chrome, Safari, Opera
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) { // IE/Edge
+                    document.msExitFullscreen();
+                }
+            }
+        }
     </script>
 </body>
 </html>
