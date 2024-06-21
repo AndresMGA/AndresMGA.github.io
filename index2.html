@@ -5,18 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YouTube Player with Full Custom Controls</title>
     <script src="https://www.youtube.com/iframe_api"></script>
-
+    <style>
+        #player1{
+            position: fixed;
+            top:100px;
+            left:100px;
+        }
+        #player2{
+            position: fixed;
+            top:460px;
+            left:100px;
+        }
+        #controls {
+            margin-top: 10px;
+        }
+        button, input {
+            margin: 5px;
+        }
+    </style>
 </head>
 <body>
     <!-- The div that will contain the YouTube player -->
-
- 
+    <div id="player1"></div>
+    <div id="player2"></div>
 
     
     <!-- Custom controls -->
     <div id="controls">
-        
-       
+        <button id="play">Play</button>
+        <button id="pause">Pause</button>
         <button id="stop">Stop</button>
         <button id="mute">Mute</button>
         <button id="unmute">Unmute</button>
@@ -29,65 +46,42 @@
     </div>
 
     <script>
+        // Load the IFrame Player API code asynchronously.
+        // var tag = document.createElement('script');
+        // tag.src = "https://www.youtube.com/iframe_api";
+        // var firstScriptTag = document.getElementsByTagName('script')[0];
+        // firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-        var screenHeight = window.screen.height;
-        var screenWidth = Math.round((screenHeight/9)*16);
-        var playerDiv = document.createElement('div');
-        playerDiv.id = 'player';
-        playerDiv.style.position = 'fixed';
-        playerDiv.style.top = '0px';
-        playerDiv.style.left = '0px';
-        playerDiv.style.width = screenWidth+'px';
-        playerDiv.style.height = screenHeight+'px';
-        document.body.appendChild(playerDiv);
-        
+
         var overlayDiv = document.createElement('div');
+
+        // Set the id attribute of the div
         overlayDiv.id = 'overlay';
+
+        // Optionally, add styles to the overlay div (for demonstration purposes)
         overlayDiv.style.position = 'fixed';
-        overlayDiv.style.top = '0px';
-        overlayDiv.style.left = '0px';
-        overlayDiv.style.width = screenWidth+'px';
-        overlayDiv.style.height = screenHeight+'px';
+        overlayDiv.style.top = '100px';
+        overlayDiv.style.left = '100px';
+        overlayDiv.style.width = '640px';
+        overlayDiv.style.height = '360px';
         overlayDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.25)'; // Semi-transparent black overlay
+
+        // Append the div to the document body (or any other parent element)
         document.body.appendChild(overlayDiv);
-
-
-
-        var playBut = document.createElement('button');
-        playBut.id = 'play';
-        playBut.innerText = "Play"
-        playBut.style.position = 'fixed';
-        playBut.style.top = Math.round(screenHeight*0.7)+'px';
-        playBut.style.left = Math.round(screenWidth*0.3)+'px';
-        playBut.style.width = Math.round(screenHeight*0.08)+'px';
-        playBut.style.height = Math.round(screenHeight*0.08)+'px';
-        document.body.appendChild(playBut);
-
-        var pauseBut = document.createElement('button');
-        pauseBut.id = 'pause';
-        pauseBut.innerText = "Pause"
-        pauseBut.style.position = 'fixed';
-        pauseBut.style.top = Math.round(screenHeight*0.7)+'px';
-        pauseBut.style.left = Math.round(screenWidth*0.4)+'px';
-        pauseBut.style.width = Math.round(screenHeight*0.08)+'px';
-        pauseBut.style.height = Math.round(screenHeight*0.08)+'px';
-        document.body.appendChild(pauseBut);
-
-   
 
         
 
         // Create a variable to hold the YouTube player
-        var player, player2;
+        var player1, player2;
         var lock=0;
         var pauseTime=0
         var userRate = 1
         var userMute = 0
         // This function creates an <iframe> (and YouTube player) after the API code downloads.
         function onYouTubeIframeAPIReady() {
-            player = new YT.Player('player', {
-                height: screenHeight,
-                width: screenWidth,
+            player1 = new YT.Player('player1', {
+                height: '360',
+                width: '640',
                 videoId: 'UKzO8gBBt4k', // Replace with your YouTube video ID
                 playerVars: {
                     'controls': 0, // Hide YouTube controls
@@ -100,20 +94,34 @@
                 }
             });
 
-            
+            player2 = new YT.Player('player2', {
+                height: '360',
+                width: '640',
+                videoId: 'fR4wBZKorGU', // Replace with your YouTube video ID
+                playerVars: {
+                    'controls': 0, // Hide YouTube controls
+                    'modestbranding': 1, // Hide YouTube logo
+                    'iv_load_policy' : 3,
+                    'rel':0
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
         }
 
         function userSettings(){
             lock=0;
-            player.setPlaybackRate(userRate);
-         
+            player1.setPlaybackRate(userRate);
+            player2.setPlaybackRate(userRate);
             if(!userMute){
-                 player.unMute();
-               
+                 player1.unMute();
+                 player2.unMute();
             }
             else{
-                player.mute();
-               
+                player1.mute();
+                player2.mute();
             }
 
         }
@@ -121,12 +129,12 @@
         function onPlayerReady(event) {
             
             
-                player.setPlaybackRate(0);
-             
-                player.mute();
-              
-                player.seekTo(5, true);
-             
+                player1.setPlaybackRate(0);
+                player2.setPlaybackRate(0);
+                player1.mute();
+                player2.mute();
+                player1.seekTo(5, true);
+                player2.seekTo(5, true);
                 pauseTime = 5;
                 lock=1;
                 logTime();
@@ -134,25 +142,26 @@
             // Event listeners for custom controls
             document.getElementById('play').addEventListener('click', function() {
                 userSettings();
-                player.playVideo();
-             
+                player1.playVideo();
+                player2.playVideo();
+
             });
 
             document.getElementById('pause').addEventListener('click', function() {
-                player.setPlaybackRate(0);
-                
-                player.mute();
-               
-                pauseTime = player.getCurrentTime();
+                player1.setPlaybackRate(0);
+                player2.setPlaybackRate(0);
+                player1.mute();
+                player2.mute();
+                pauseTime = player1.getCurrentTime();
                 lock=1;
             });
 
             document.getElementById('stop').addEventListener('click', function() {
                 
-                player.setPlaybackRate(0);
-               
-                player.mute();
-               
+                player1.setPlaybackRate(0);
+                player2.setPlaybackRate(0);
+                player1.mute();
+                player2.mute();
                 pauseTime = 2;
                 lock=1;
 
@@ -161,44 +170,45 @@
 
             document.getElementById('mute').addEventListener('click', function() {
                 userMute = 1
-                player.mute();
-                
+                player1.mute();
+                player2.mute();
             });
 
             document.getElementById('unmute').addEventListener('click', function() {
                 userMute = 0
-                player.unMute();
-                
+                player1.unMute();
+                player2.unMute();
             });
 
             document.getElementById('seek').addEventListener('click', function() {
                 userSettings();
-                player.seekTo(30, true);
-              
+                player1.seekTo(30, true);
+                player2.seekTo(30, true);
+
             });
 
             document.getElementById('slow').addEventListener('click', function() {
                 userRate = 0.5
-                player.setPlaybackRate(userRate);
-             
+                player1.setPlaybackRate(userRate);
+                player2.setPlaybackRate(userRate);
             });
 
             document.getElementById('normal').addEventListener('click', function() {
                 userRate = 1
-                player.setPlaybackRate(userRate);
-               
+                player1.setPlaybackRate(userRate);
+                player2.setPlaybackRate(userRate);
                 logSubtitles();
             });
 
             document.getElementById('fast').addEventListener('click', function() {
                 userRate = 2
-                player.setPlaybackRate(userRate);
-               
+                player1.setPlaybackRate(userRate);
+                player2.setPlaybackRate(userRate);
             });
 
             document.getElementById('volume').addEventListener('input', function() {
-                player.setVolume(this.value);
-                
+                player1.setVolume(this.value);
+                player2.setVolume(this.value);
             });
 
             // Start logging time once the player is ready and playing
@@ -215,13 +225,13 @@
         function logTime() {
             setInterval(function() {
                 if (lock){
-                        player.seekTo(pauseTime,true);
-                       
+                        player1.seekTo(pauseTime,true);
+                        player2.seekTo(pauseTime,true);
                         return;
                     }
-                if (player && player.getPlayerState() == YT.PlayerState.PLAYING) {
-                    currTime=player.getCurrentTime();
-                    //console.log('Current time: ' + player.getCurrentTime() + ' seconds');
+                if (player1 && player1.getPlayerState() == YT.PlayerState.PLAYING) {
+                    currTime=player1.getCurrentTime();
+                    //console.log('Current time: ' + player1.getCurrentTime() + ' seconds');
 
                 }
             }, 40);
