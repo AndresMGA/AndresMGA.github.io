@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YouTube Player with Full Custom Controls</title>
     <script src="https://www.youtube.com/iframe_api" frameborder="0" allowfullscreen></script>
-
+    <link rel="manifest" href="manifest.json">
 </head>
 <body>
     <!-- The div that will contain the YouTube player -->
@@ -161,9 +161,9 @@
                 logTime();
 
             fsBut.addEventListener('click', function() {
-                screen.orientation.lock('landscape-primary').then(function() {
+               
                     containerDiv.webkitRequestFullscreen();
-                });
+               
                 
             //toggleFullscreen();
         });
