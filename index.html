@@ -40,7 +40,7 @@
 
         
         vw = Math.round((h/9)*16);
-        var left = Math.round((v-vw)/2)+'px';
+        var left = Math.round((w-vw)/2)+'px';
 
         var containerDiv = document.createElement('div');
         containerDiv.id = 'container';
@@ -114,8 +114,8 @@
         // This function creates an <iframe> (and YouTube player) after the API code downloads.
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('player', {
-                height: screenHeight,
-                width: w,
+                height: h,
+                width: vw,
                 videoId: 'UKzO8gBBt4k', // Replace with your YouTube video ID
                 playerVars: {
                     'controls': 0, // Hide YouTube controls
