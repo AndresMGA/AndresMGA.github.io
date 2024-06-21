@@ -30,9 +30,7 @@
 
     <script>
 
-        screen.orientation.lock('landscape-primary').then(function() {
-                  
-                });
+        
         var h = window.screen.height;
         var w = window.screen.width;
 
@@ -163,7 +161,10 @@
                 logTime();
 
             fsBut.addEventListener('click', function() {
-                containerDiv.webkitRequestFullscreen();
+                screen.orientation.lock('landscape-primary').then(function() {
+                    containerDiv.webkitRequestFullscreen();
+                });
+                
             //toggleFullscreen();
         });
             // Event listeners for custom controls
