@@ -314,6 +314,22 @@
                 }
             }
         }
+        function updateOrientationStatus() {
+            var orientation = screen.orientation || screen.mozOrientation || screen.msOrientation;
+  
+            
+            if (orientation) {
+                overlayDiv.innerText = 'Orientation: ' + orientation.type;
+            } else {
+                overlayDiv.innerText = 'Orientation not supported';
+            }
+        }
+
+        // Update the orientation status on page load
+        updateOrientationStatus();
+
+        // Add event listener for orientation changes
+        screen.orientation.addEventListener('change', updateOrientationStatus);
     </script>
 </body>
 </html>
