@@ -316,12 +316,31 @@
         }
         function updateOrientationStatus() {
             var orientation = screen.orientation || screen.mozOrientation || screen.msOrientation;
-  
+            
             
             if (orientation) {
-                overlayDiv.innerText = 'Orientation: ' + orientation.type;
+                statusElement.innerText = 'Orientation: ' + orientation.type;
+            } else if (window.orientation !== undefined) {
+                var orientationType;
+                switch (window.orientation) {
+                    case 0:
+                        orientationType = 'portrait-primary';
+                        break;
+                    case 90:
+                        orientationType = 'landscape-primary';
+                        break;
+                    case 180:
+                        orientationType = 'portrait-secondary';
+                        break;
+                    case -90:
+                        orientationType = 'landscape-secondary';
+                        break;
+                    default:
+                        orientationType = 'unknown';
+                }
+                playBut.innerText =  orientationType;
             } else {
-                overlayDiv.innerText = 'Orientation not supported';
+                playBut.innerText = 'Orientation not supported';
             }
         }
 
@@ -329,7 +348,11 @@
         updateOrientationStatus();
 
         // Add event listener for orientation changes
-        screen.orientation.addEventListener('change', updateOrientationStatus);
+        if (screen.orientation) {
+            screen.orientation.addEventListener('change', updateOrientationStatus);
+        } else {
+            window.addEventListener('orientationchange', updateOrientationStatus);
+        }
     </script>
 </body>
 </html>
