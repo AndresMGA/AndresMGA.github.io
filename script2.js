@@ -38,6 +38,16 @@ overlayDiv.style.height = h+'px';
 overlayDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.0)'; // Semi-transparent black overlay
 containerDiv.appendChild(overlayDiv);
 
+var fsBut = document.createElement('button');
+fsBut.id = 'fs';
+fsBut.innerText ="CLICK TO GO FULL SCREEN";
+
+fsBut.style.fontSize = "40px"
+fsBut.style.position = 'fixed';
+fsBut.style.top = Math.round(w*0.1)+'px';
+fsBut.style.left = Math.round(w*0.1)+'px';
+containerDiv.appendChild(fsBut);
+
 var buttons_top = Math.round(h*0.78)+'px';
 var settingsBut = document.createElement('i');
 settingsBut.id = 'fs';
@@ -124,9 +134,10 @@ function onPlayerReady(event) {w
         lock=1;
         logTime();
 
-    settingsBut.addEventListener('click', function() {
+    fsBut.addEventListener('click', function() {
        
-            
+        containerDiv.webkitRequestFullscreen();
+        fsBut.style.display ="none"
        
         
     //toggleFullscreen();
