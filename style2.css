@@ -1,0 +1,26 @@
+.buttons {
+    text-align: center;
+  }
+  
+  .buttons button {
+
+  }
+  
+  .buttons i {
+    font-size: 64px;
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+
+  }
+  
+  .buttons i:hover {
+    color: #507dbcff;
+  }
+  
+  .buttons i.active {
+    color: #507dbcff;
+  }
+  
+  .hide {
+    display: none !important;
+  }
