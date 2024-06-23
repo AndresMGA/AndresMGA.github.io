@@ -113,7 +113,7 @@ function userSettings(){
 // The API will call this function when the video player is ready.
 function onPlayerReady(event) {w
     
-    
+    //containerDiv.webkitRequestFullscreen();
         player.setPlaybackRate(0);
      
         player.mute();
@@ -287,7 +287,7 @@ function toggleFullscreen() {
     }
 }
 
-containerDiv.webkitRequestFullscreen();
+
 // function updateOrientationStatus() {
 //     var orientation = screen.orientation || screen.mozOrientation || screen.msOrientation;
     
