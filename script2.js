@@ -9,7 +9,7 @@ if(h>w){
 
 vw = Math.round((h/9)*16);
 var left = Math.round((w-vw)/2)+'px';
-
+var margin = Math.round((w-vw)/2);
 var containerDiv = document.createElement('div');
 containerDiv.id = 'container';
 containerDiv.style.position = 'fixed';
@@ -44,8 +44,8 @@ fsBut.innerText ="CLICK TO GO FULL SCREEN";
 
 fsBut.style.fontSize = "40px"
 fsBut.style.position = 'fixed';
-fsBut.style.top = Math.round(w*0.1)+'px';
-fsBut.style.left = Math.round(w*0.1)+'px';
+fsBut.style.top = Math.round(margin+vw*0.1)+'px';
+fsBut.style.left = Math.round(margin+vw*0.1)+'px';
 containerDiv.appendChild(fsBut);
 
 var buttons_top = Math.round(h*0.78)+'px';
@@ -55,7 +55,7 @@ settingsBut.className = "buttons fa-solid fa-gear fs"
 settingsBut.style.fontSize = "64px"
 settingsBut.style.position = 'fixed';
 settingsBut.style.top = buttons_top
-settingsBut.style.left = Math.round(w*0.87)+'px';
+settingsBut.style.left = Math.round(margin+vw*0.87)+'px';
 containerDiv.appendChild(settingsBut);
 
 var playBut = document.createElement('i');
@@ -64,7 +64,7 @@ playBut.className = "buttons fa-solid fa-circle-play play"
 playBut.style.fontSize = "64px"
 playBut.style.position = 'fixed';
 playBut.style.top = buttons_top
-playBut.style.left = Math.round(w*0.03)+'px';
+playBut.style.left = Math.round(margin+vw*0.03)+'px';
 containerDiv.appendChild(playBut);
 
 var pauseBut = document.createElement('i');
@@ -73,7 +73,7 @@ pauseBut.className = "buttons fa-solid fa-circle-pause active hide pause"
 pauseBut.style.fontSize = "64px"
 pauseBut.style.position = 'fixed';
 pauseBut.style.top = buttons_top
-pauseBut.style.left = Math.round(w*0.03)+'px';
+pauseBut.style.left = Math.round(margin+vw*0.03)+'px';
 containerDiv.appendChild(pauseBut);
 
 
