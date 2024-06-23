@@ -162,59 +162,59 @@ function onPlayerReady(event) {w
         pauseBut.classList.add("hide");
     });
 
-    document.getElementById('stop').addEventListener('click', function() {
+    // document.getElementById('stop').addEventListener('click', function() {
         
-        player.setPlaybackRate(0);
+    //     player.setPlaybackRate(0);
        
-        player.mute();
+    //     player.mute();
        
-        pauseTime = 3;
-        lock=1;
+    //     pauseTime = 3;
+    //     lock=1;
 
 
-    });
+    // });
 
-    document.getElementById('mute').addEventListener('click', function() {
-        userMute = 1
-        player.mute();
+    // document.getElementById('mute').addEventListener('click', function() {
+    //     userMute = 1
+    //     player.mute();
         
-    });
+    // });
 
-    document.getElementById('unmute').addEventListener('click', function() {
-        userMute = 0
-        player.unMute();
+    // document.getElementById('unmute').addEventListener('click', function() {
+    //     userMute = 0
+    //     player.unMute();
         
-    });
+    // });
 
-    document.getElementById('seek').addEventListener('click', function() {
-        userSettings();
-        player.seekTo(30, true);
+    // document.getElementById('seek').addEventListener('click', function() {
+    //     userSettings();
+    //     player.seekTo(30, true);
       
-    });
+    // });
 
-    document.getElementById('slow').addEventListener('click', function() {
-        userRate = 0.5
-        player.setPlaybackRate(userRate);
+    // document.getElementById('slow').addEventListener('click', function() {
+    //     userRate = 0.5
+    //     player.setPlaybackRate(userRate);
      
-    });
+    // });
 
-    document.getElementById('normal').addEventListener('click', function() {
-        userRate = 1
-        player.setPlaybackRate(userRate);
+    // document.getElementById('normal').addEventListener('click', function() {
+    //     userRate = 1
+    //     player.setPlaybackRate(userRate);
        
-        logSubtitles();
-    });
+    //     logSubtitles();
+    // });
 
-    document.getElementById('fast').addEventListener('click', function() {
-        userRate = 2
-        player.setPlaybackRate(userRate);
+    // document.getElementById('fast').addEventListener('click', function() {
+    //     userRate = 2
+    //     player.setPlaybackRate(userRate);
        
-    });
+    // });
 
-    document.getElementById('volume').addEventListener('input', function() {
-        player.setVolume(this.value);
+    // document.getElementById('volume').addEventListener('input', function() {
+    //     player.setVolume(this.value);
         
-    });
+    // });
 
     // Start logging time once the player is ready and playing
     
