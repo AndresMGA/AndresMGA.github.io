@@ -59,7 +59,7 @@
                 if (file.name.startsWith('.')) return;
 
                 const li = document.createElement('li');
-                
+
                 if (file.type === 'dir') {
                     // If it's a directory, add a folder class and recurse into its contents
                     li.innerHTML = `<span class="folder">${file.name}</span>`;
@@ -67,10 +67,6 @@
                     li.appendChild(subTree);
                     ul.appendChild(li);
                     fetchSubTree(file.url, subTree); // Fetch subdirectory contents
-                } else if (file.type === 'file') {
-                    // If it's a file, just display it with the file class
-                    li.innerHTML = `<span class="file">${file.name}</span>`;
-                    ul.appendChild(li);  // Append the file directly to the parent <ul>
                 }
             });
         }
@@ -82,7 +78,27 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    renderFileTree(data, ul);  // Recurse into subfolders and render them
+                    // Now, we process the files and directories inside the subdirectory
+                    data.forEach(file => {
+                        // Ignore hidden files and folders
+                        if (file.name.startsWith('.')) return;
+
+                        const li = document.createElement('li');
+
+                        if (file.type === 'dir') {
+                            // If it's a directory, render it as a folder
+                            li.innerHTML = `<span class="folder">${file.name}</span>`;
+                            const subTree = document.createElement('ul');
+                            li.appendChild(subTree);
+                            ul.appendChild(li);
+                            fetchSubTree(file.url, subTree); // Recurse into the subfolder
+                        } else if (file.type === 'file') {
+                            // If it's a file, display it under the folder
+                            li.innerHTML = `<span class="file">${file.name}</span>`;
+                            ul.appendChild(li);  // Append the file to the folder
+                        }
+
+                    });
                 }
             } catch (error) {
                 console.error("Error fetching subdirectory:", error);
