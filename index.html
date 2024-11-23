@@ -1,1 +1,96 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Content File Tree</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .file-tree {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+        .folder {
+            font-weight: bold;
+        }
+        .file {
+            color: #555;
+        }
+        .loading {
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>File Tree of Repository: AndresMGA/content</h1>
+    <div id="loading" class="loading">Loading file tree...</div>
+    <ul id="fileTree" class="file-tree"></ul>
+
+    <script>
+        async function fetchFileTree() {
+            const apiUrl = 'https://api.github.com/repos/AndresMGA/content/contents'; // GitHub API endpoint for repository contents
+
+            try {
+                // Fetch the file tree from the GitHub API
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Hide the loading message
+                    document.getElementById('loading').style.display = 'none';
+                    // Populate the file tree
+                    renderFileTree(data);
+                } else {
+                    console.error("Error fetching data:", data);
+                    document.getElementById('loading').textContent = "Failed to load file tree.";
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                document.getElementById('loading').textContent = "Failed to load file tree.";
+            }
+        }
+
+        // Recursive function to render the file tree as nested lists
+        function renderFileTree(files) {
+            const ul = document.getElementById('fileTree');
+
+            files.forEach(file => {
+                const li = document.createElement('li');
+                
+                if (file.type === 'dir') {
+                    // If it's a directory, add a folder class and recurse into its contents
+                    li.innerHTML = `<span class="folder">${file.name}</span>`;
+                    const subTree = document.createElement('ul');
+                    li.appendChild(subTree);
+                    fetchSubTree(file.url, subTree); // Fetch subdirectory contents
+                } else if (file.type === 'file') {
+                    // If it's a file, just display it with the file class
+                    li.innerHTML = `<span class="file">${file.name}</span>`;
+                }
+
+                ul.appendChild(li);
+            });
+        }
+
+        // Fetch the subdirectory contents recursively
+        async function fetchSubTree(url, ul) {
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (response.ok) {
+                    renderFileTree(data, ul);  // Recurse into subfolders and render them
+                }
+            } catch (error) {
+                console.error("Error fetching subdirectory:", error);
+            }
+        }
+
+        // Call the function to load the file tree when the page is loaded
+        fetchFileTree();
+    </script>
+</body>
+</html>
