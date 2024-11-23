@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -54,10 +53,11 @@
         }
 
         // Recursive function to render the file tree as nested lists
-        function renderFileTree(files) {
-            const ul = document.getElementById('fileTree');
-
+        function renderFileTree(files, ul) {
             files.forEach(file => {
+                // Ignore hidden files and folders (those that start with a dot)
+                if (file.name.startsWith('.')) return;
+
                 const li = document.createElement('li');
                 
                 if (file.type === 'dir') {
