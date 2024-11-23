@@ -26,4 +26,4 @@ jobs:
 
       - name: Run Docker Image
         run: |
-          docker run --rm andres/mscore-docker:latest
+          docker run --rm andresmga/mscore-docker:latest
