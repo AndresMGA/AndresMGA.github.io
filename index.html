@@ -62,16 +62,18 @@
 
                 if (file.type === 'dir') {
                     // If it's a directory, add a folder class and recurse into its contents
-                    li.innerHTML = `<span class="folder">${file.name}</span>`;
+                    const folderName = replaceUnderscores(file.name);
+                    li.innerHTML = `<span class="folder">${folderName}</span>`;
                     const subTree = document.createElement('ul');  // Create a new <ul> for subdirectories
                     li.appendChild(subTree);
                     ul.appendChild(li);
                     fetchSubTree(file.url, subTree); // Fetch subdirectory contents
                 }
                 else if (file.type === 'file') {
-                    // If it's a file, remove the file extension before displaying
+                    // If it's a file, remove the file extension and replace underscores with spaces
                     const fileNameWithoutExtension = removeExtension(file.name);
-                    li.innerHTML = `<span class="file">${fileNameWithoutExtension}</span>`;
+                    const fileNameCleaned = replaceUnderscores(fileNameWithoutExtension);
+                    li.innerHTML = `<span class="file">${fileNameCleaned}</span>`;
                     ul.appendChild(li);  // Append the file to the parent folder
                 }
             });
@@ -93,16 +95,18 @@
 
                         if (file.type === 'dir') {
                             // If it's a directory, render it as a folder
-                            li.innerHTML = `<span class="folder">${file.name}</span>`;
+                            const folderName = replaceUnderscores(file.name);
+                            li.innerHTML = `<span class="folder">${folderName}</span>`;
                             const subTree = document.createElement('ul');
                             li.appendChild(subTree);
                             ul.appendChild(li);
                             fetchSubTree(file.url, subTree); // Recurse into the subfolder
                         }
                         else if (file.type === 'file') {
-                            // If it's a file, remove the file extension before displaying
+                            // If it's a file, remove the file extension and replace underscores with spaces
                             const fileNameWithoutExtension = removeExtension(file.name);
-                            li.innerHTML = `<span class="file">${fileNameWithoutExtension}</span>`;
+                            const fileNameCleaned = replaceUnderscores(fileNameWithoutExtension);
+                            li.innerHTML = `<span class="file">${fileNameCleaned}</span>`;
                             ul.appendChild(li);  // Append the file to the folder
                         }
                     });
@@ -119,6 +123,11 @@
                 return fileName.substring(0, lastDotIndex);  // Remove extension
             }
             return fileName;  // If no dot is found, return the name as is
+        }
+
+        // Function to replace underscores with spaces
+        function replaceUnderscores(fileName) {
+            return fileName.replace(/_/g, ' ');  // Replace all underscores with spaces
         }
 
         // Call the function to load the file tree when the page is loaded
