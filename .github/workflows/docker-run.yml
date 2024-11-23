@@ -22,7 +22,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Pull Docker Image from Docker Hub
-        run: docker pull myusername/mscore-docker:latest
+        run: docker pull andresmga/mscore-docker:latest
 
       - name: Run Docker Image
         run: |
