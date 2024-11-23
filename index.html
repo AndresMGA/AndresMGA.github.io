@@ -40,8 +40,8 @@
                 if (response.ok) {
                     // Hide the loading message
                     document.getElementById('loading').style.display = 'none';
-                    // Populate the file tree
-                    renderFileTree(data);
+                    // Populate the file tree (starting with the root ul)
+                    renderFileTree(data, document.getElementById('fileTree'));
                 } else {
                     console.error("Error fetching data:", data);
                     document.getElementById('loading').textContent = "Failed to load file tree.";
@@ -63,15 +63,15 @@
                 if (file.type === 'dir') {
                     // If it's a directory, add a folder class and recurse into its contents
                     li.innerHTML = `<span class="folder">${file.name}</span>`;
-                    const subTree = document.createElement('ul');
+                    const subTree = document.createElement('ul');  // Create a new <ul> for subdirectories
                     li.appendChild(subTree);
+                    ul.appendChild(li);
                     fetchSubTree(file.url, subTree); // Fetch subdirectory contents
                 } else if (file.type === 'file') {
                     // If it's a file, just display it with the file class
                     li.innerHTML = `<span class="file">${file.name}</span>`;
+                    ul.appendChild(li);  // Append the file directly to the parent <ul>
                 }
-
-                ul.appendChild(li);
             });
         }
 
