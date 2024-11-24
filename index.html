@@ -47,13 +47,13 @@
 </head>
 <body>
     <div id="leftPanel">
-        <h3>Root Directories</h3>
+        <h3>List of Resources</h3>
         <ul id="rootDirectories">
             <!-- Root directories will be populated here -->
         </ul>
     </div>
     <div id="middlePanel">
-        <h3>Directory Contents</h3>
+        <h3 id="currentList"></h3>
         <ul id="directoryContents">
             <!-- Subdirectory and file contents will be populated here -->
         </ul>
@@ -106,6 +106,7 @@
 
         function populateLevel2Directories(contents, parentLi) {
             const ul = document.createElement('ul');
+            const parentDirName = parentLi.textContent
             contents.forEach(item => {
                 const li = document.createElement('li');
                 li.textContent = item.name;
@@ -115,7 +116,7 @@
                     // Add click event to open subdirectory contents in the middle panel
                     li.addEventListener('click', (e) => {
                         e.stopPropagation(); // Prevent parent click
-                        populateDirectoryContents(item.contents);
+                        populateDirectoryContents(item,parentDirName);
                     });
                     // Recursively add subdirectories under this directory in the left panel
                     
@@ -130,10 +131,13 @@
 
 
         // Populate the middle panel with the contents of the selected subdirectory
-        function populateDirectoryContents(contents) {
+        function populateDirectoryContents(item,parentName) {
+            const contents = item.contents
+            const currentList = document.getElementById('currentList');
             const directoryContentsList = document.getElementById('directoryContents');
             directoryContentsList.innerHTML = ''; // Clear previous contents
-
+            
+            currentList.innerHTML = parentName + " / "+ item.name;
             contents.forEach(item => {
                 const li = document.createElement('li');
                 li.textContent = item.name;
