@@ -3,134 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GitHub Content File Tree</title>
+    <title>File Tree Viewer</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            display: flex;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
         }
-        .file-tree {
+        #leftPanel {
+            width: 250px;
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            overflow-y: auto;
+        }
+        #middlePanel {
+            flex-grow: 1;
+            padding: 10px;
+            overflow-y: auto;
+        }
+        ul {
             list-style-type: none;
             padding-left: 20px;
         }
-        .folder {
-            font-weight: bold;
+        li {
+            cursor: pointer;
+            margin: 5px 0;
+        }
+        li:hover {
+            background-color: #555;
+        }
+        .subdirectory {
+            margin-left: 20px;
+            padding-left: 10px;
+            border-left: 2px solid #bbb;
         }
         .file {
-            color: #555;
-        }
-        .loading {
-            font-size: 20px;
+            color: #999;
         }
     </style>
 </head>
 <body>
-    <h1>File Tree of Repository: AndresMGA/content</h1>
-    <div id="loading" class="loading">Loading file tree...</div>
-    <ul id="fileTree" class="file-tree"></ul>
+    <div id="leftPanel">
+        <h3>Root Directories</h3>
+        <ul id="rootDirectories">
+            <!-- Root directories will be populated here -->
+        </ul>
+    </div>
+    <div id="middlePanel">
+        <h3>Directory Contents</h3>
+        <ul id="directoryContents">
+            <!-- Subdirectory and file contents will be populated here -->
+        </ul>
+    </div>
 
     <script>
+        // Fetch the JSON from GitHub
+        const jsonUrl = 'https://raw.githubusercontent.com/AndresMGA/content/refs/heads/main/file_tree.json';
+
+        // Fetch the file tree data
         async function fetchFileTree() {
-            const apiUrl = 'https://api.github.com/repos/AndresMGA/content/contents'; // GitHub API endpoint for repository contents
-
             try {
-                // Fetch the file tree from the GitHub API
-                const response = await fetch(apiUrl);
-                const data = await response.json();
-
-                if (response.ok) {
-                    // Hide the loading message
-                    document.getElementById('loading').style.display = 'none';
-                    // Populate the file tree (starting with the root ul)
-                    renderFileTree(data, document.getElementById('fileTree'));
-                } else {
-                    console.error("Error fetching data:", data);
-                    document.getElementById('loading').textContent = "Failed to load file tree.";
-                }
+                const response = await fetch(jsonUrl);
+                const fileTree = await response.json();
+                populateRootDirectorie(fileTree);
             } catch (error) {
-                console.error("Error:", error);
-                document.getElementById('loading').textContent = "Failed to load file tree.";
+                console.error('Error fetching file tree:', error);
             }
         }
 
-        // Recursive function to render the file tree as nested lists
-        function renderFileTree(files, ul) {
-            files.forEach(file => {
-                // Ignore hidden files and folders (those that start with a dot)
-                if (file.name.startsWith('.')) return;
-
-                const li = document.createElement('li');
-
-                if (file.type === 'dir') {
-                    // If it's a directory, add a folder class and recurse into its contents
-                    const folderName = replaceUnderscores(file.name);
-                    li.innerHTML = `<span class="folder">${folderName}</span>`;
-                    const subTree = document.createElement('ul');  // Create a new <ul> for subdirectories
-                    li.appendChild(subTree);
-                    ul.appendChild(li);
-                    fetchSubTree(file.url, subTree); // Fetch subdirectory contents
-                }
-                else if (file.type === 'file') {
-                    // If it's a file, remove the file extension and replace underscores with spaces
-                    const fileNameWithoutExtension = removeExtension(file.name);
-                    const fileNameCleaned = replaceUnderscores(fileNameWithoutExtension);
-                    li.innerHTML = `<span class="file">${fileNameCleaned}</span>`;
-                    ul.appendChild(li);  // Append the file to the parent folder
+        // Populate the left panel with root directories and their subdirectories
+        function populateRootDirectorie(fileTree) {
+            const rootDirectoriesList = document.getElementById('rootDirectories');
+            fileTree.forEach(rootDir => {
+                if (rootDir.type === 'directory') {
+                populateLevel1Directories(rootDir.contents, rootDirectoriesList);
                 }
             });
         }
+        function populateLevel1Directories(contents, parent) {
+            const ul = document.createElement('ul');
+            contents.forEach(item => {
+                if (item.type === 'directory') {
+                const li = document.createElement('li');
+                li.textContent = item.name;
 
-        // Fetch the subdirectory contents recursively
-        async function fetchSubTree(url, ul) {
-            try {
-                const response = await fetch(url);
-                const data = await response.json();
+                
+                    li.classList.add('subdirectory');
+                    // Add click event to open subdirectory contents in the middle panel
 
-                if (response.ok) {
-                    // Now, we process the files and directories inside the subdirectory
-                    data.forEach(file => {
-                        // Ignore hidden files and folders
-                        if (file.name.startsWith('.')) return;
+                    ul.appendChild(li);
+                    // Recursively add subdirectories under this directory in the left panel
+                    populateLevel2Directories(item.contents, li);
+                } 
 
-                        const li = document.createElement('li');
+                
+            });
+            parent.appendChild(ul);
+        }
 
-                        if (file.type === 'dir') {
-                            // If it's a directory, render it as a folder
-                            const folderName = replaceUnderscores(file.name);
-                            li.innerHTML = `<span class="folder">${folderName}</span>`;
-                            const subTree = document.createElement('ul');
-                            li.appendChild(subTree);
-                            ul.appendChild(li);
-                            fetchSubTree(file.url, subTree); // Recurse into the subfolder
-                        }
-                        else if (file.type === 'file') {
-                            // If it's a file, remove the file extension and replace underscores with spaces
-                            const fileNameWithoutExtension = removeExtension(file.name);
-                            const fileNameCleaned = replaceUnderscores(fileNameWithoutExtension);
-                            li.innerHTML = `<span class="file">${fileNameCleaned}</span>`;
-                            ul.appendChild(li);  // Append the file to the folder
-                        }
+        function populateLevel2Directories(contents, parentLi) {
+            const ul = document.createElement('ul');
+            contents.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item.name;
+
+                if (item.type === 'directory') {
+                    li.classList.add('subdirectory');
+                    // Add click event to open subdirectory contents in the middle panel
+                    li.addEventListener('click', (e) => {
+                        e.stopPropagation(); // Prevent parent click
+                        populateDirectoryContents(item.contents);
                     });
+                    // Recursively add subdirectories under this directory in the left panel
+                    
+                } else if (item.type === 'file') {
+                    li.classList.add('file');
                 }
-            } catch (error) {
-                console.error("Error fetching subdirectory:", error);
-            }
+
+                ul.appendChild(li);
+            });
+            parentLi.appendChild(ul);
         }
 
-        // Function to remove file extension
-        function removeExtension(fileName) {
-            const lastDotIndex = fileName.lastIndexOf('.');
-            if (lastDotIndex !== -1) {
-                return fileName.substring(0, lastDotIndex);  // Remove extension
-            }
-            return fileName;  // If no dot is found, return the name as is
+
+        // Populate the middle panel with the contents of the selected subdirectory
+        function populateDirectoryContents(contents) {
+            const directoryContentsList = document.getElementById('directoryContents');
+            directoryContentsList.innerHTML = ''; // Clear previous contents
+
+            contents.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item.name;
+                if (item.type === 'directory') {
+                    li.classList.add('subdirectory');
+                    // Add click event to open subdirectory contents in the middle panel
+                    li.addEventListener('click', (e) => {
+                        e.stopPropagation(); // Prevent parent click
+                        populateDirectoryContents(item.contents);
+                    });
+                } else if (item.type === 'file') {
+                    li.classList.add('file');
+                }
+                directoryContentsList.appendChild(li);
+            });
         }
 
-        // Function to replace underscores with spaces
-        function replaceUnderscores(fileName) {
-            return fileName.replace(/_/g, ' ');  // Replace all underscores with spaces
-        }
-
-        // Call the function to load the file tree when the page is loaded
+        // Initial fetch when page loads
         fetchFileTree();
     </script>
 </body>
